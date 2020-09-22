@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" >
+    <head>
+
+        <meta charset="UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Cadastro de Posts</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"></link>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script>
+            $(document).ready(function () {
+                var $campoCpf = $("#CPF");
+                $campoCpf.mask('000.000.000-00', {reverse: true});
+            });
+        </script>
+    </head>
+    <body>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Cadastro de Usuários</strong>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" th:object="${user}" th:action="@{/save}" method="POST" style="margin: 10px">
+                    <div class="form-group">
+                        <fieldset>
+                            <div class="form-group row">
+                                <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+                                    <div th:each="detailedError : ${#fields.detailedErrors()}">
+                                        <span th:text="${detailedError.message}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-1">
+                                    <input type="text" class="form-control input-sm" id="id" th:field="*{id}" readOnly="readonly"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4" th:classappend="${#fields.hasErrors('nome')}? 'has-error'">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control input-sm" th:field="*{nome}" autofocus="autofocus" placeholder="Informe o nome" maxlength="50"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4" th:classappend="${#fields.hasErrors('cpf')}? 'has-error'">
+                                    <label>CPF</label>
+                                    <input type="text"
+                                           id="CPF"
+                                           autocomplete="off"
+                                           class="form-control" th:field="*{cpf}" placeholder="Informe o CPF"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-2" th:classappend="${#fields.hasErrors('dataNascimento')}? 'has-error'">
+                                    <label>Data Nascimento</label>
+                                    <input type="date" class="form-control input-sm" th:field="*{dataNascimento}"/>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="form-group row">
+<!--                        <input type="submit" class="btn btn-sm btn-primary" value="Salvar">-->
+                        <button type="submit" class="btn btn-sm btn-primary">Salvar</button>
+                        <a th:href="@{/}" class="btn btn-sm btn-default">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+
+<!--<form action="#" th:action="@{/adduser}" th:object="${user}" method="post">-->
+<!--    <label for="nome">Nome</label>-->
+<!--    <input type="text" th:field="*{nome}" id="nome" placeholder="Nome">-->
+<!--    <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>-->
+<!--    <label for="cpf">Cpf</label>-->
+<!--    <input type="text" th:field="*{cpf}" id="cpf" placeholder="Cpf">-->
+<!--    <span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></span>-->
+<!--    <label for="dataNascimento">Data Nascimento</label>-->
+<!--    <input type="date" th:field="*{dataNascimento}" id="dataNascimento" placeholder="dataNascimento">-->
+<!--    <span th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></span>-->
+<!--    <input type="submit" value="Adiciona Usuário">-->
+<!--</form>-->

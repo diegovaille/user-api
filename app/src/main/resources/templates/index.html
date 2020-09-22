@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Usuários</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="panel panel-default" th:switch="${users}">
+        <h2 th:case="null">Sem usuários ainda!</h2>
+        <div class="panel-heading">
+            <strong>Usuários</strong>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Data Nascimento</th>
+                        <th>Idade</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.nome}"></td>
+                        <td data-mask="000.000.000-00" th:text="${user.cpf}"></td>
+                        <td th:text="${#temporals.format(user.dataNascimento, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${user.idade}"></td>
+                        <td>
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-sm btn-primary" th:href="@{/edit/{id}(id=${user.id})}" >Editar</a>
+                                <a class="delete btn btn-sm btn-danger" th:href="@{/delete/{id}(id=${user.id})}">Excluir</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-1">
+                <select class="form-control pagination" id="pageSizeSelect">
+                    <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
+                            th:selected="${pageSize} == ${selectedPageSize}"></option>
+                </select>
+            </div>
+            <div th:if="${users.totalPages != 1}" class="form-group col-md-11 pagination-centered">
+                <ul class="pagination">
+                    <li th:class="${users.number == 0} ? disabled">
+                        <a class="pageLink" th:href="@{/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+                    </li>
+                    <li th:class="${users.number == 0} ? disabled">
+                        <a class="pageLink" th:href="@{/(pageSize=${selectedPageSize}, page=${users.number})}">&larr;</a>
+                    </li>
+                    <li th:class="${users.number == (page - 1)} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                        <a class="pageLink" th:href="@{/(pageSize=${selectedPageSize}, page=${page})}"
+                           th:text="${page}"></a>
+                    </li>
+                    <li th:class="${users.number + 1 == users.totalPages} ? disabled">
+                        <a class="pageLink"
+                           th:href="@{/(pageSize=${selectedPageSize}, page=${users.number + 2})}">&rarr;</a>
+                    </li>
+                    <li th:class="${users.number + 1 == users.totalPages} ? disabled">
+                        <a class="pageLink"
+                           th:href="@{/(pageSize=${selectedPageSize}, page=${users.totalPages})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a class="btn btn-sm btn-success" th:href="@{/add/}" >Adicionar</a>
+        </div>
+    </div>
+</body>
